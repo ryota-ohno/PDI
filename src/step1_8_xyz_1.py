@@ -115,7 +115,7 @@ def listen(auto_dir,monomer_name,num_nodes,isTest):##args自体を引数に取�
         if len(params_dict)!=0:#終わりがまだ見えないなら
             alreadyCalculated = check_calc_status(auto_dir,params_dict)
             if not(alreadyCalculated):
-                file_name = exec_gjf(auto_dir, monomer_name, {**params_dict,}, machine_type,isInterlayer=False,isTest=isTest)##計算を実行並びにxyzファイルの出力
+                file_name = exec_gjf(auto_dir, monomer_name, {**params_dict}, machine_type,isTest=isTest)##計算を実行並びにxyzファイルの出力
                 df_newline = pd.Series({**params_dict,'E':0.,'machine_type':machine_type,'status':'InProgress','file_name':file_name})
                 df_E=df_E.append(df_newline,ignore_index=True)
                 df_E.to_csv(auto_csv,index=False)
