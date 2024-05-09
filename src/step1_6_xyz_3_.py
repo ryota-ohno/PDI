@@ -61,6 +61,7 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
             for i in range(len(dict_matrix)):
                 maxnum_machine2 = 3#int(num_nodes/2) ##多分俺のために空けていてくださったので2 3にする
                 mod = i % max_nodes
+                print(mod)
                 if mod < maxnum_machine2:
                     machine_type = 2 
                 else:
@@ -201,7 +202,7 @@ if __name__ == '__main__':
     parser.add_argument('--auto-dir',type=str,help='path to dir which includes gaussian, gaussview and csv')
     parser.add_argument('--monomer-name',type=str,help='monomer name')
     parser.add_argument('--num-nodes',type=int,help='num nodes')
-    parser.add_argument('--max-nodes',type=int,help='num nodes')
+    parser.add_argument('--max-nodes',type=int,help='max nodes')
     ##maxnum-machine2 がない
     args = parser.parse_args()
 
