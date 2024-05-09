@@ -139,7 +139,7 @@ def make_gjf_xyz(auto_dir,monomer_name,params_dict,machine_type):
     line_list_dimer_t1 = get_xyzR_lines(dimer_array_t1,file_description+'_t1',machine_type)
     line_list_dimer_t2 = get_xyzR_lines(dimer_array_t2,file_description+'_t2',machine_type)
     
-    gij_xyz_lines = ['$ RunGauss\n'] + line_list_dimer_t1 + ['\n\n\n']
+    gij_xyz_lines = ['$ RunGauss\n'] + line_list_dimer_t1 + ['\n\n--Link1--\n'] + line_list_dimer_t2 + ['\n\n\n']
     
     file_name = get_file_name_from_dict(monomer_name,params_dict)
     os.makedirs(os.path.join(auto_dir,'gaussian'),exist_ok=True)
