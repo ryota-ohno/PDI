@@ -98,8 +98,8 @@ def get_params_dict(auto_dir, num_nodes):
     df_init_params = pd.read_csv(init_params_csv)
     df_cur = pd.read_csv(os.path.join(auto_dir, 'step1.csv'))
     df_init_params_inprogress = df_init_params[df_init_params['status']=='InProgress']
-    fixed_param_keys = ['x2','y2','z2']
-    opt_param_keys = ['x1','y1','z1']
+    fixed_param_keys = ['x1','y1','z1']
+    opt_param_keys = ['x2','y2','z2']
 
     #最初の立ち上がり時
     if len(df_init_params_inprogress) < num_nodes:
@@ -143,6 +143,7 @@ def get_params_dict(auto_dir, num_nodes):
                 else:
                     d={**fixed_params_dict,**opt_params_dict}
                     dict_matrix.append(d)
+                    #print(d)
     return dict_matrix
         
 def get_opt_params_dict(df_cur, init_params_dict,fixed_params_dict):
