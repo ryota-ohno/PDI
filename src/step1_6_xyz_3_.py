@@ -38,7 +38,6 @@ def listen(auto_dir,monomer_name,num_nodes,isTest):##args自体を引数に取�
     df_queue = df_E.loc[df_E['status']=='InProgress',['machine_type','file_name']]
     machine_type_list = df_queue['machine_type'].values.tolist()
     len_queue = len(df_queue)
-    maxnum_machine2 = 3#int(num_nodes/2) ##多分俺のために空けていてくださったので2 3にする
     
     for idx,row in zip(df_queue.index,df_queue.values):
         machine_type,file_name = row
@@ -60,9 +59,16 @@ def listen(auto_dir,monomer_name,num_nodes,isTest):##args自体を引数に取�
         dict_matrix = get_params_dict(auto_dir,num_nodes)
         if len(dict_matrix)!=0:#終わりがまだ見えないなら
             for i in range(len(dict_matrix)):
-                machine_type_list = df_queue['machine_type'].values.tolist()
-                machine2IsFull = machine_type_list.count(2) >= maxnum_machine2
-                machine_type = 1 if machine2IsFull else 2
+                maxnum_machine2 = 3#int(num_nodes/2) ##多分俺のために空けていてくださったので2 3にする
+                mod = i % num_nodes
+                if mod < maxnum_machine2:
+                    machine_type = 2 
+                else:
+                    machine_type = 1
+                #df_queue = df_E.loc[df_E['status']=='InProgress',['machine_type','file_name']]
+                #machine_type_list = df_queue['machine_type'].values.tolist()
+                #machine2IsFull = machine_type_list.count(2) >= maxnum_machine2
+                #machine_type = 1 if machine2IsFull else 2
                 params_dict=dict_matrix[i]
                 alreadyCalculated = check_calc_status(auto_dir,params_dict)
                 if not(alreadyCalculated):
