@@ -170,7 +170,7 @@ def get_opt_params_dict(df_cur, init_params_dict,fixed_params_dict):
                     if len(df_val_xyz)==0:
                         para_list.append([x2,y2,z2])
                         continue
-                    xyz2_list.append(x2,y2,z2);E_list.append(df_val_xyz['E'].values[0])
+                    xyz2_list.append([x2,y2,z2]);E_list.append(df_val_xyz['E'].values[0])
         if len(para_list) != 0:
             return False,para_list
         x2_init,y2_init,z2_init = xyz2_list[np.argmin(np.array(E_list))]
