@@ -59,8 +59,10 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
         dict_matrix = get_params_dict(auto_dir,num_nodes)
         if len(dict_matrix)!=0:#終わりがまだ見えないなら
             for i in range(len(dict_matrix)):
+                df_queue = df_E.loc[df_E['status']=='InProgress',['machine_type','file_name']]
+                len_queue = len(df_queue)
                 maxnum_machine2 = 2#int(num_nodes/2) ##多分俺のために空けていてくださったので2 3にする
-                mod = i % max_nodes
+                mod = len_queue % max_nodes
                 print(mod)
                 if mod < maxnum_machine2:
                     machine_type = 2 
