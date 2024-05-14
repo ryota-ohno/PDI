@@ -41,6 +41,8 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
     machine_type_list = df_queue['machine_type'].values.tolist()
     len_queue = len(df_queue)
     
+    fixed_param_keys = ['x2','y2','z2'];opt_param_keys = ['x1','y1','z1']
+        
     for idx,row in zip(df_queue.index,df_queue.values):
         machine_type,file_name = row
         log_filepath = os.path.join(*[auto_dir,'gaussian',file_name])
@@ -60,21 +62,21 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
     len_qw=len(df_qw)
     margin = max_nodes - len_queue
     index = 0
-    while (margin > 0) and (len_qw > 0):
-        fixed_param_keys = ['x2','y2','z2']
-        opt_param_keys = ['x1','y1','z1']
-        params_dict = df_qw.loc[index,fixed_param_keys+opt_param_keys].to_dict()
-        df_queue = df_E.loc[df_E['status']=='InProgress',['machine_type','file_name']]
-        machine_type_list = df_queue['machine_type'].values.tolist()
-        machine2IsFull = machine_type_list.count(2) >= maxnum_machine2
-        machine_type = 1 if machine2IsFull else 2
-        file_name = exec_gjf(auto_dir, monomer_name, {**params_dict}, machine_type,isTest=isTest)
-        df_newline = pd.Series({**params_dict,'E':0.,'machine_type':machine_type,'status':'InProgress','file_name':file_name})
-        df_E=df_E.append(df_newline,ignore_index=True)
-        df_E.to_csv(auto_csv,index=False)
-        margin -= 1
-        len_qw -= 1
-        index += 1
+    if len_qw > 0 and margin > 0:
+        for index in df_qw.index:
+            params_dict = df_qw.loc[index,fixed_param_keys+opt_param_keys].to_dict()
+            df_queue = df_E.loc[df_E['status']=='InProgress',['machine_type','file_name']]
+            machine_type_list = df_queue['machine_type'].values.tolist()
+            machine2IsFull = machine_type_list.count(2) >= maxnum_machine2
+            machine_type = 1 if machine2IsFull else 2
+            file_name = exec_gjf(auto_dir, monomer_name, {**params_dict}, machine_type,isTest=isTest)
+            df_newline = pd.Series({**params_dict,'E':0.,'machine_type':machine_type,'status':'InProgress','file_name':file_name})
+            df_E=df_E.append(df_newline,ignore_index=True)
+            df_E.to_csv(auto_csv,index=False)
+            margin -= 1
+            if margin == 0:
+                break
+            
     
     dict_matrix = get_params_dict(auto_dir,num_nodes)##更新分を流す
     if len(dict_matrix)!=0:#終わりがまだ見えないなら
