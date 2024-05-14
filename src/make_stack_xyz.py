@@ -35,6 +35,8 @@ def get_xyzR_lines(xyzR_array,file_description,machine_type):
         '%mem=15GB\n',
         f'%nproc={mp_num}\n',
         '#P TEST pbepbe/6-311G** EmpiricalDispersion=GD3BJ counterpoise=2\n',
+        '# symmetry = none\n',
+        '#integral=NoXCTest\n',
         '\n',
         file_description+'\n',
         '\n',
