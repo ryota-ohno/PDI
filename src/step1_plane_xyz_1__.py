@@ -33,7 +33,7 @@ def main_process(args):
         time.sleep(1)
 
 def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引数に取るか中身をばらして取るかの違い
-    maxnum_machine2 = 2#int(num_nodes/2) ##多分俺のために空けていてくださったので2 3にする
+    maxnum_machine2 = 3#int(num_nodes/2) ##多分俺のために空けていてくださったので2 3にする
     
     auto_csv = os.path.join(auto_dir,'step1.csv')
     df_E = pd.read_csv(auto_csv)
