@@ -114,13 +114,13 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
                     file_name = exec_gjf(auto_dir, monomer_name, {**params_dict}, machine_type,isTest=isTest)
                     df_newline = pd.Series({**params_dict,'E':0.,'machine_type':machine_type,'status':'InProgress','file_name':file_name})
                     df_E=df_E.append(df_newline,ignore_index=True)
-                    df_E.to_csv(auto_csv,index=False)
+                    df_E.to_csv(auto_csv,index=False, float_format='%.2f')
             else:
                 if not(alreadyCalculated):
                     file_name = exec_gjf(auto_dir, monomer_name, {**params_dict}, 1,isTest=True)
                     df_newline = pd.Series({**params_dict,'E':0.,'machine_type':1,'status':'qw','file_name':file_name})
                     df_E=df_E.append(df_newline,ignore_index=True)
-                    df_E.to_csv(auto_csv,index=False)
+                    df_E.to_csv(auto_csv,index=False, float_format='%.2f')
     
     init_params_csv=os.path.join(auto_dir, 'step1_init_params.csv')
     df_init_params = pd.read_csv(init_params_csv)
