@@ -114,13 +114,13 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
                     file_name = exec_gjf(auto_dir, monomer_name, {**params_dict}, machine_type,isTest=isTest)
                     df_newline = pd.Series({**params_dict,'E':0.,'machine_type':machine_type,'status':'InProgress','file_name':file_name})
                     df_E=df_E.append(df_newline,ignore_index=True)
-                    df_E.to_csv(auto_csv,index=False, float_format='%.2f')
+                    df_E.to_csv(auto_csv,index=False)
             else:
                 if not(alreadyCalculated):
                     file_name = exec_gjf(auto_dir, monomer_name, {**params_dict}, 1,isTest=True)
                     df_newline = pd.Series({**params_dict,'E':0.,'machine_type':1,'status':'qw','file_name':file_name})
                     df_E=df_E.append(df_newline,ignore_index=True)
-                    df_E.to_csv(auto_csv,index=False, float_format='%.2f')
+                    df_E.to_csv(auto_csv,index=False)
     
     init_params_csv=os.path.join(auto_dir, 'step1_init_params.csv')
     df_init_params = pd.read_csv(init_params_csv)
@@ -217,6 +217,7 @@ def get_opt_params_dict(df_cur, init_params_dict,fixed_params_dict):
                         continue
                     xyz2_list.append([x2,y2,z2]);E_list.append(df_val_xyz['E'].values[0])
         if len(para_list) != 0:
+            print(para_list)
             return False,para_list
         x2_init,y2_init,z2_init = xyz2_list[np.argmin(np.array(E_list))]
         if x2_init==x2_init_prev and y2_init==y2_init_prev and z2_init==z2_init_prev:
