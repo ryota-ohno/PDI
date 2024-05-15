@@ -76,10 +76,21 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
             params_dict = row[fixed_param_keys + opt_param_keys].to_dict()# パラメータの辞書を作成
             machine_type = 1 if machine_counts.get(2, 0) >= maxnum_machine2 else 2# マシンタイプの決定
             machine_counts[machine_type] += 1
-            file_name = exec_gjf(auto_dir, monomer_name, {**params_dict}, machine_type, isTest=isTest)# ジョブの実行
+
+            file_name = ''
+            file_name += monomer_name
+            for key,val in params_dict.items():
+                if key in ['x1','y1','z1','x2','y2','z2']:
+                    val = np.round(val,2)
+                elif key in ['A1','A2']:#,'theta']:
+                    val = int(val)
+                file_name += '_{}={}'.format(key,val)
+            file_name += '.log'
+            file_name0 = exec_gjf(auto_dir, monomer_name, {**params_dict}, machine_type, isTest=isTest)# ジョブの実行
             # 新しい行を作成
             df_E.at[index, 'machine_type'] = machine_type
             df_E.at[index, 'status'] = 'InProgress'
+            df_E.at[index, 'file_name'] = file_name
             margin -= 1
         
         df_E.to_csv(auto_csv, index=False)# データフレームをCSVに保存
