@@ -157,7 +157,7 @@ def get_file_name_from_dict(monomer_name,params_dict):
     file_name += monomer_name
     for key,val in params_dict.items():
         if key in ['x1','y1','z1','x2','y2','z2']:
-            val = np.round(val,2)
+            val = val
         elif key in ['A1','A2']:#,'theta']:
             val = int(val)
         file_name += '_{}={}'.format(key,val)

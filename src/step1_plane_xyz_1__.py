@@ -168,7 +168,7 @@ def get_params_dict(auto_dir, num_nodes):
         fixed_params_dict = df_init_params.loc[index,fixed_param_keys].to_dict()
         isDone, opt_params_matrix = get_opt_params_dict(df_cur, init_params_dict,fixed_params_dict)
         if isDone:
-            opt_params_dict={'x2':opt_params_matrix[0][0],'y2':opt_params_matrix[0][1],'z2':opt_params_matrix[0][2]}
+            opt_params_dict={'x2':np.round(opt_params_matrix[0][0],1),'y2':np.round(opt_params_matrix[0][1],1),'z2':np.round(opt_params_matrix[0][2],1)}
             # df_init_paramsのstatusをupdate
             df_init_params = update_value_in_df(df_init_params,index,'status','Done')
             if np.max(df_init_params.index) < index+1:##もうこれ以上は新しい計算は進まない
@@ -187,7 +187,7 @@ def get_params_dict(auto_dir, num_nodes):
 
         else:
             for i in range(len(opt_params_matrix)):
-                opt_params_dict={'x2':opt_params_matrix[i][0],'y2':opt_params_matrix[i][1],'z2':opt_params_matrix[i][2]}
+                opt_params_dict={'x2':np.round(opt_params_matrix[i][0],1),'y2':np.round(opt_params_matrix[i][1],1),'z2':np.round(opt_params_matrix[i][2],1)}
                 df_inprogress = filter_df(df_cur, {**fixed_params_dict,**opt_params_dict,'status':'InProgress'})
                 df_qw = filter_df(df_cur, {**fixed_params_dict,**opt_params_dict,'status':'qw'})
                 if (len(df_inprogress)>=1) or (len(df_qw)>=1):
