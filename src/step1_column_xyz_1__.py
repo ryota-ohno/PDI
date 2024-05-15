@@ -53,7 +53,7 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
             continue
         else:
             len_queue-=1;machine_type_list.remove(machine_type)
-            E1=float(E_list[0]);E2=float(E_list[0])##8分子に向けてep1,ep2作成　ep1:b ep2:a
+            E1=float(E_list[0]);E2=float(E_list[1])##8分子に向けてep1,ep2作成　ep1:b ep2:a
             E=E1+E2
             df_E.loc[idx, ['E','E1','E2','status']] = [E,E1,E2,'Done']
             df_E.to_csv(auto_csv,index=False)
