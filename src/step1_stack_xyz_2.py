@@ -22,7 +22,7 @@ def main_process(args):
     os.makedirs(os.path.join(auto_dir,'gaussview'), exist_ok=True)
     auto_csv_path = os.path.join(auto_dir,'step1.csv')
     if not os.path.exists(auto_csv_path):        
-        df_E = pd.DataFrame(columns = ['x1','y1','z1','x2','y2','z2','E','machine_type','status','file_name'])##いじる
+        df_E = pd.DataFrame(columns = ['x1','y1','z1','x2','y2','z2','E','E1','E2','machine_type','status','file_name'])##いじる
         df_E.to_csv(auto_csv_path,index=False)##step3を二段階でやる場合二段階目ではinitをやらないので念のためmainにも組み込んでおく
 
     os.chdir(os.path.join(args.auto_dir,'gaussian'))
@@ -74,6 +74,7 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
             df_newline = pd.Series({**params_dict,'E':0.,'machine_type':machine_type,'status':'InProgress','file_name':file_name})
             df_E=df_E.append(df_newline,ignore_index=True)
             df_E.to_csv(auto_csv,index=False)
+            len_queue+=1
             margin -= 1
             if margin == 0:
                 break
@@ -85,9 +86,6 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
             params_dict=dict_matrix[i]
             alreadyCalculated = check_calc_status(auto_dir,params_dict)
             
-            df_queue = df_E.loc[df_E['status']=='InProgress',['machine_type','file_name']]
-            len_queue = len(df_queue)
-            
             isAvailable = len_queue < max_nodes 
             if isAvailable:
                 machine_type_list = df_queue['machine_type'].values.tolist()
@@ -98,6 +96,7 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
                     df_newline = pd.Series({**params_dict,'E':0.,'machine_type':machine_type,'status':'InProgress','file_name':file_name})
                     df_E=df_E.append(df_newline,ignore_index=True)
                     df_E.to_csv(auto_csv,index=False)
+                    len_queue+=1
             else:
                 if not(alreadyCalculated):
                     file_name = exec_gjf(auto_dir, monomer_name, {**params_dict}, 1,isTest=True)
@@ -145,7 +144,7 @@ def get_params_dict(auto_dir, num_nodes):
             params_dict = df_init_params.loc[index,fixed_param_keys+opt_param_keys].to_dict()
             return [params_dict]
     dict_matrix=[]
-    for index in df_init_params_inprogress.index:##こちら側はinit_params内のある業に関する探索が終わった際の新しい行での探索を開始するもの ###ここを改良すればよさそう
+    for index in df_init_params_inprogress.index:##こちら側はinit_params内のある行に関する探索が終わった際の新しい行での探索を開始するもの ###ここを改良すればよさそう
         df_init_params = pd.read_csv(init_params_csv)
         init_params_dict = df_init_params.loc[index,fixed_param_keys+opt_param_keys].to_dict()
         fixed_params_dict = df_init_params.loc[index,fixed_param_keys].to_dict()
@@ -173,7 +172,7 @@ def get_params_dict(auto_dir, num_nodes):
                 opt_params_dict={'x1':opt_params_matrix[i][0],'y1':opt_params_matrix[i][1],'z1':opt_params_matrix[i][2]}
                 df_inprogress = filter_df(df_cur, {**fixed_params_dict,**opt_params_dict,'status':'InProgress'})
                 df_qw = filter_df(df_cur, {**fixed_params_dict,**opt_params_dict,'status':'qw'})
-                if (len(df_inprogress)>=1) or (len(df_qw)>=1):
+                if (len(df_inprogress)>0) or (len(df_qw)>0):
                     continue
                 else:
                     d={**fixed_params_dict,**opt_params_dict}
