@@ -72,6 +72,7 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
             machine_type = 1 if machine2IsFull else 2
             file_name = exec_gjf(auto_dir, monomer_name, {**params_dict}, machine_type,isTest=isTest)
             df_E = update_value_in_df(df_E,index,'status','InProgress')
+            df_E = update_value_in_df(df_E,index,'machine_type',machine_type)
             df_E.to_csv(auto_csv,index=False)
             len_queue+=1
             margin -= 1
