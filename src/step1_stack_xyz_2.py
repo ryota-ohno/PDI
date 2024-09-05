@@ -87,6 +87,7 @@ def listen(auto_dir,monomer_name,num_nodes,max_nodes,isTest):##args自体を引�
             
             isAvailable = len_queue < max_nodes 
             if isAvailable:
+                df_queue = df_E.loc[df_E['status']=='InProgress',['machine_type','file_name']]
                 machine_type_list = df_queue['machine_type'].values.tolist()
                 machine2IsFull = machine_type_list.count(2) >= maxnum_machine2
                 machine_type = 1 if machine2IsFull else 2
